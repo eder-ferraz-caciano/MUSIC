@@ -62,6 +62,10 @@ const PENTA_MAJ = [0, 2, 4, 7, 9]
 const PENTA_MIN = [0, 3, 5, 7, 10]
 const BLUES = [0, 3, 5, 6, 7, 10]
 const MAJOR = [0, 2, 4, 5, 7, 9, 11]
+const DORIAN = [0, 2, 3, 5, 7, 9, 10]
+const PHRYGIAN = [0, 1, 3, 5, 7, 8, 10]
+const LYDIAN = [0, 2, 4, 6, 7, 9, 11]
+const MIXOLYDIAN = [0, 2, 4, 5, 7, 9, 10]
 const MINOR_NAT = [0, 2, 3, 5, 7, 8, 10]
 const HARM_MIN = [0, 2, 3, 5, 7, 8, 11]
 const MELOD_MIN = [0, 2, 3, 5, 7, 9, 11]
@@ -78,6 +82,10 @@ const R_PINK = 'bg-pink-500 text-white shadow-lg shadow-pink-500/40'
 const R_ORAN = 'bg-orange-500 text-white shadow-lg shadow-orange-500/40'
 const R_TEAL = 'bg-teal-500 text-white shadow-lg shadow-teal-500/40'
 const R_LIME = 'bg-lime-500 text-white shadow-lg shadow-lime-500/40'
+const R_CYAN = 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/40'
+const R_VIOLET = 'bg-violet-500 text-white shadow-lg shadow-violet-500/40'
+const R_AMBER = 'bg-amber-500 text-white shadow-lg shadow-amber-500/40'
+const R_ROSE = 'bg-rose-500 text-white shadow-lg shadow-rose-500/40'
 const BLUE_NOTE = 'bg-yellow-400 text-black font-bold ring-2 ring-yellow-300'
 const SPECIAL = 'bg-amber-400 text-black font-bold ring-2 ring-amber-300'
 
@@ -162,6 +170,71 @@ const templates: Record<string, ScaleTemplate> = {
             { label: 'Shape 3', offset: 0, span: 5 },
             { label: 'Shape 4', offset: 3, span: 3 },
             { label: 'Shape 5', offset: 5, span: 4 },
+        ]
+    },
+    dorian: {
+        name: 'Dórico (2º Modo)',
+        desc: 'Menor com a 6ª elevada — aquela nota que dá o toque "jazzy" e suave. O modo favorito do rock e do jazz: Carlos Santana, Miles Davis e praticamente todo o funk moram aqui. Toque sobre acordes m7.',
+        btnActive: 'bg-cyan-500 text-white shadow-[0_0_15px_rgba(6,182,212,0.5)]',
+        btnInactive: 'bg-zinc-950 text-zinc-400 hover:text-white',
+        glowClass: 'bg-cyan-600',
+        intervals: DORIAN,
+        rootColor: R_CYAN,
+        shapeOffsets: [
+            { label: 'Shape 1', offset: 0, span: 4 },
+            { label: 'Shape 2', offset: 2, span: 3 },
+            { label: 'Shape 3', offset: 4, span: 4 },
+            { label: 'Shape 4', offset: 7, span: 3 },
+            { label: 'Shape 5', offset: -5, span: 4 },
+        ]
+    },
+    mixolydian: {
+        name: 'Mixolídio (5º Modo)',
+        desc: 'Maior com a 7ª abaixada — o modo do Blues, do Rock e do Funk. Toda progressão I7 pede Mixolídio. Jimi Hendrix, Eric Clapton, Led Zeppelin. Também a base dos riffs de blues sobre acorde dominante.',
+        btnActive: 'bg-amber-500 text-white shadow-[0_0_15px_rgba(245,158,11,0.5)]',
+        btnInactive: 'bg-zinc-950 text-zinc-400 hover:text-white',
+        glowClass: 'bg-amber-600',
+        intervals: MIXOLYDIAN,
+        rootColor: R_AMBER,
+        shapeOffsets: [
+            { label: 'Shape 1', offset: -4, span: 4 },
+            { label: 'Shape 2', offset: -2, span: 3 },
+            { label: 'Shape 3', offset: 0, span: 5 },
+            { label: 'Shape 4', offset: 3, span: 3 },
+            { label: 'Shape 5', offset: 5, span: 4 },
+        ]
+    },
+    phrygian: {
+        name: 'Frígio (3º Modo)',
+        desc: 'Menor com a 2ª abaixada — aquele semitom descendente que define o flamenco, o metal e a música oriental. O riff de "Wherever I May Roam" do Metallica? Frígio puro.',
+        btnActive: 'bg-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.5)]',
+        btnInactive: 'bg-zinc-950 text-zinc-400 hover:text-white',
+        glowClass: 'bg-rose-600',
+        intervals: PHRYGIAN,
+        rootColor: R_ROSE,
+        shapeOffsets: [
+            { label: 'Shape 1', offset: 0, span: 4 },
+            { label: 'Shape 2', offset: 3, span: 3 },
+            { label: 'Shape 3', offset: 5, span: 4 },
+            { label: 'Shape 4', offset: 8, span: 4 },
+            { label: 'Shape 5', offset: -4, span: 3 },
+        ]
+    },
+    lydian: {
+        name: 'Lídio (4º Modo)',
+        desc: 'Maior com a 4ª elevada — aquele som "flutuante" e onírico. Favorito de Joe Satriani, Steve Vai e das trilhas cinematográficas de John Williams. Cria tensão suave e etérea sobre acordes maiores.',
+        btnActive: 'bg-violet-500 text-white shadow-[0_0_15px_rgba(139,92,246,0.5)]',
+        btnInactive: 'bg-zinc-950 text-zinc-400 hover:text-white',
+        glowClass: 'bg-violet-600',
+        intervals: LYDIAN,
+        rootColor: R_VIOLET,
+        specials: [{ interval: 6, color: SPECIAL }],
+        shapeOffsets: [
+            { label: 'Shape 1', offset: -4, span: 4 },
+            { label: 'Shape 2', offset: -2, span: 4 },
+            { label: 'Shape 3', offset: 1, span: 4 },
+            { label: 'Shape 4', offset: 3, span: 3 },
+            { label: 'Shape 5', offset: 5, span: 5 },
         ]
     },
     minor: {
