@@ -5,11 +5,13 @@ import { useRouter } from 'vue-router'
 import { useProgressStore } from '../../store/progress'
 import { ChevronLeft, Play, Music, CheckCircle } from 'lucide-vue-next'
 import { audio } from '../../utils/audio'
-import { chordDefinitions } from '../../data/chords'
+import { chordDefinitions, openChordDefinitions } from '../../data/chords'
 
 const router = useRouter()
 const store = useProgressStore()
 
+const openChordKeys = Object.keys(openChordDefinitions)
+const selectedOpenChord = ref<string>(openChordKeys[0]!)
 const chordKeys = Object.keys(chordDefinitions)
 const currentChord = ref<string>(chordKeys[0]!)
 const shapeIdx = ref(0)
@@ -71,6 +73,52 @@ const completeLesson = () => {
       Cada acorde pode ser tocado em <strong>múltiplos shapes (CAGED)</strong> ao longo do braço inteiro!
       Selecione o acorde e navegue pelos shapes.
     </p>
+
+    <!-- ── Seção de Acordes Abertos ── -->
+    <div class="mb-14">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="w-1.5 h-8 bg-green-500 rounded-full block"></span>
+        <h2 class="text-xl font-bold text-zinc-100">Acordes Abertos — O Ponto de Partida</h2>
+      </div>
+      <p class="text-zinc-400 text-sm mb-6 ml-5">
+        Antes do sistema CAGED, todo guitarrista aprende os acordes abertos. São os shapes mais fáceis e soam incríveis porque usam as cordas soltas como ressonância natural.
+      </p>
+
+      <!-- Seletores dos acordes abertos -->
+      <div class="flex flex-wrap gap-2 mb-6">
+        <button
+          v-for="key in openChordKeys" :key="key"
+          @click="selectedOpenChord = key"
+          class="px-4 py-2 rounded-xl text-sm font-bold transition-all border"
+          :class="selectedOpenChord === key
+            ? 'bg-green-500/20 border-green-500 text-green-400 shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+            : 'border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-white'"
+        >
+          {{ openChordDefinitions[key]?.name.split(' — ')[0] }}
+        </button>
+      </div>
+
+      <!-- Card do acorde selecionado -->
+      <div v-if="openChordDefinitions[selectedOpenChord]" class="bg-zinc-900/60 border border-zinc-800 rounded-3xl p-6 relative overflow-hidden">
+        <div class="absolute -top-32 -right-32 w-64 h-64 bg-green-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10">
+          <h3 class="text-lg font-black mb-1">{{ openChordDefinitions[selectedOpenChord]!.name }}</h3>
+          <p class="text-zinc-400 text-sm mb-1 border-l-2 border-green-500 pl-3">{{ openChordDefinitions[selectedOpenChord]!.desc }}</p>
+          <p class="text-zinc-500 text-xs mb-5 pl-3 italic">💡 {{ openChordDefinitions[selectedOpenChord]!.tip }}</p>
+          <Fretboard
+            :activeNotes="openChordDefinitions[selectedOpenChord]!.notes"
+            :frets="5"
+            :interactiveNotes="true"
+          />
+          <p class="mt-4 text-zinc-500 text-xs">🟣 Tônica | 🔵 Terça | ⚫ Quinta — Clique nas notas para ouvir cada uma!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 mb-6">
+      <span class="w-1.5 h-8 bg-amber-500 rounded-full block"></span>
+      <h2 class="text-xl font-bold text-zinc-100">Sistema CAGED — Todo o Braço</h2>
+    </div>
 
     <div class="grid lg:grid-cols-4 gap-6 mb-12">
       
