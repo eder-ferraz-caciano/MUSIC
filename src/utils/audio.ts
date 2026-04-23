@@ -12,80 +12,73 @@ export const PRESET_META: Record<SoundPreset, { label: string; icon: string }> =
     dist:     { label: 'Elétrica Distorcida', icon: '🎸' },
 }
 
-// PluckSynth does NOT extend Monophonic, so PolySynth rejects it.
-// We manage our own voice pool (8 instances) with round-robin allocation.
-type PluckParams = { attackNoise: number; dampening: number; resonance: number }
+// Real guitar samples via gleitz/midi-js-soundfonts (GitHub Pages — CORS open)
+const GLEITZ = 'https://gleitz.github.io/midi-js-soundfonts/MusyngKite/'
 
-interface PresetConfig {
-    pluck: PluckParams
+// 11 notes spread across the guitar range (E2–E5).
+// Tone.Sampler pitch-shifts automatically for notes between loaded samples.
+const SAMPLE_URLS: Record<string, string> = {
+    'A2': 'A2.mp3', 'C3': 'C3.mp3', 'E3': 'E3.mp3', 'G3': 'G3.mp3',
+    'A3': 'A3.mp3', 'C4': 'C4.mp3', 'E4': 'E4.mp3', 'G4': 'G4.mp3',
+    'A4': 'A4.mp3', 'C5': 'C5.mp3', 'E5': 'E5.mp3',
+}
+
+interface PresetCfg {
+    baseUrl: string
     reverbWet: number
     distWet: number
-    volume: number // dB — already boosted ~+1.6 dB (~20% louder) vs neutral baseline
+    volume: number // dB — ~20% louder vs a neutral -4 dB baseline
 }
 
-const PRESETS: Record<SoundPreset, PresetConfig> = {
-    // Warm, round — nylon string classical guitar
-    nylon: {
-        pluck:     { attackNoise: 1.2, dampening: 2400, resonance: 0.966 },
-        reverbWet: 0.42,
-        distWet:   0,
-        volume:    -2,
-    },
-    // Punchy, bright attack — steel string acoustic / folk
-    steel: {
-        pluck:     { attackNoise: 3.0, dampening: 5200, resonance: 0.976 },
-        reverbWet: 0.26,
-        distWet:   0,
-        volume:    -1,
-    },
-    // Glassy, long sustain — clean electric (neck pickup)
-    electric: {
-        pluck:     { attackNoise: 1.4, dampening: 8000, resonance: 0.990 },
-        reverbWet: 0.16,
-        distWet:   0,
-        volume:    0,
-    },
-    // Saturated crunch — light overdrive rock/blues
-    dist: {
-        pluck:     { attackNoise: 2.2, dampening: 5500, resonance: 0.992 },
-        reverbWet: 0.18,
-        distWet:   0.52,
-        volume:    -3,
-    },
+const CFG: Record<SoundPreset, PresetCfg> = {
+    nylon:    { baseUrl: `${GLEITZ}acoustic_guitar_nylon-mp3/`,  reverbWet: 0.40, distWet: 0,    volume: -2 },
+    steel:    { baseUrl: `${GLEITZ}acoustic_guitar_steel-mp3/`,  reverbWet: 0.24, distWet: 0,    volume: -1 },
+    electric: { baseUrl: `${GLEITZ}electric_guitar_clean-mp3/`,  reverbWet: 0.15, distWet: 0,    volume:  0 },
+    dist:     { baseUrl: `${GLEITZ}distortion_guitar-mp3/`,      reverbWet: 0.18, distWet: 0.50, volume: -3 },
 }
-
-const VOICE_POOL_SIZE = 8
 
 class AudioManager {
-    private voices: Tone.PluckSynth[]
-    private voiceIdx = 0
+    private samplers = new Map<SoundPreset, Tone.Sampler>()
+    private loaded = new Set<SoundPreset>()
     private reverb: Tone.Freeverb
     private distortion: Tone.Distortion
     private compressor: Tone.Compressor
     private volumeNode: Tone.Volume
     private initialized = false
+
     readonly currentPreset = ref<SoundPreset>('nylon')
+    // true while the current preset's samples are still downloading
+    readonly loading = ref(true)
 
     constructor() {
-        const init = PRESETS.nylon
-
-        // Voice pool — round-robin allocation avoids voice stealing artifacts
-        this.voices = Array.from({ length: VOICE_POOL_SIZE }, () =>
-            new Tone.PluckSynth(init.pluck)
-        )
-
         this.distortion = new Tone.Distortion({ distortion: 0.65, wet: 0 })
         this.compressor = new Tone.Compressor(-18, 4)
-        // Freeverb is synchronous (feedback algorithm, no async IR generation)
-        this.reverb = new Tone.Freeverb({ roomSize: 0.55, dampening: 3200 })
-        this.volumeNode = new Tone.Volume(init.volume)
+        // Freeverb: synchronous feedback reverb, no async IR generation
+        this.reverb     = new Tone.Freeverb({ roomSize: 0.55, dampening: 3200 })
+        this.volumeNode = new Tone.Volume(CFG.nylon.volume)
 
-        // All voices → shared mix bus → effects chain → output
-        const mix = new Tone.Gain(1)
-        this.voices.forEach(v => v.connect(mix))
-        mix.chain(this.distortion, this.compressor, this.reverb, this.volumeNode, Tone.getDestination())
+        // Shared effects bus: all samplers → distortion → compressor → reverb → volume → out
+        this.distortion.chain(this.compressor, this.reverb, this.volumeNode, Tone.getDestination())
+        this.reverb.wet.value     = CFG.nylon.reverbWet
+        this.distortion.wet.value = CFG.nylon.distWet
 
-        this.reverb.wet.value = init.reverbWet
+        // Load the default preset immediately; others are lazy-loaded on first select
+        this._loadSampler('nylon')
+    }
+
+    private _loadSampler(preset: SoundPreset) {
+        if (this.samplers.has(preset)) return
+        const cfg = CFG[preset]
+        const sampler = new Tone.Sampler({
+            urls: SAMPLE_URLS,
+            baseUrl: cfg.baseUrl,
+            onload: () => {
+                this.loaded.add(preset)
+                if (this.currentPreset.value === preset) this.loading.value = false
+            },
+        })
+        sampler.connect(this.distortion)
+        this.samplers.set(preset, sampler)
     }
 
     async init() {
@@ -96,29 +89,33 @@ class AudioManager {
     }
 
     setPreset(preset: SoundPreset) {
-        const p = PRESETS[preset]
-        this.voices.forEach(v => v.set(p.pluck))
-        this.reverb.wet.value = p.reverbWet
-        this.distortion.wet.value = p.distWet
-        this.volumeNode.volume.value = p.volume
         this.currentPreset.value = preset
+        const cfg = CFG[preset]
+        this.reverb.wet.value        = cfg.reverbWet
+        this.distortion.wet.value    = cfg.distWet
+        this.volumeNode.volume.value = cfg.volume
+
+        if (!this.samplers.has(preset)) {
+            this.loading.value = true
+            this._loadSampler(preset)
+        } else {
+            this.loading.value = !this.loaded.has(preset)
+        }
     }
 
-    playNote(note: string, _duration = '4n') {
+    playNote(note: string) {
         if (!this.initialized) return
-        // PluckSynth decays naturally — no triggerRelease needed
-        const voice = this.voices[this.voiceIdx % VOICE_POOL_SIZE]!
-        this.voiceIdx++
-        voice.triggerAttack(note)
+        const s = this.samplers.get(this.currentPreset.value)
+        if (!s || !this.loaded.has(this.currentPreset.value)) return
+        // triggerAttack lets the sample decay naturally (no forced release)
+        s.triggerAttack(note)
     }
 
-    playChord(notes: string[], _duration = '2n') {
+    playChord(notes: string[]) {
         if (!this.initialized) return
-        notes.forEach(note => {
-            const voice = this.voices[this.voiceIdx % VOICE_POOL_SIZE]!
-            this.voiceIdx++
-            voice.triggerAttack(note)
-        })
+        const s = this.samplers.get(this.currentPreset.value)
+        if (!s || !this.loaded.has(this.currentPreset.value)) return
+        notes.forEach(n => s.triggerAttack(n))
     }
 
     // Guitar standard tuning: string 1 = high e (E4) … string 6 = low E (E2)

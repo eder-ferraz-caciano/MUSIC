@@ -53,8 +53,13 @@ const select = (preset: SoundPreset) => {
           : 'bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-white'"
         title="Mudar som da guitarra"
       >
-        <span class="text-sm">{{ PRESET_META[audio.currentPreset.value].icon }}</span>
-        <span>{{ PRESET_META[audio.currentPreset.value].label }}</span>
+        <!-- Spinner while samples download -->
+        <svg v-if="audio.loading.value" class="w-3.5 h-3.5 animate-spin text-purple-400" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+        </svg>
+        <span v-else class="text-sm">{{ PRESET_META[audio.currentPreset.value].icon }}</span>
+        <span>{{ audio.loading.value ? 'Carregando…' : PRESET_META[audio.currentPreset.value].label }}</span>
         <svg
           class="w-3 h-3 transition-transform duration-200"
           :class="open ? 'rotate-180' : ''"
