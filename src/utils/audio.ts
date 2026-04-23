@@ -31,10 +31,10 @@ interface PresetCfg {
 }
 
 const CFG: Record<SoundPreset, PresetCfg> = {
-    nylon:    { baseUrl: `${GLEITZ}acoustic_guitar_nylon-mp3/`,  reverbWet: 0.40, distWet: 0,    volume: -2 },
-    steel:    { baseUrl: `${GLEITZ}acoustic_guitar_steel-mp3/`,  reverbWet: 0.24, distWet: 0,    volume: -1 },
-    electric: { baseUrl: `${GLEITZ}electric_guitar_clean-mp3/`,  reverbWet: 0.15, distWet: 0,    volume:  0 },
-    dist:     { baseUrl: `${GLEITZ}distortion_guitar-mp3/`,      reverbWet: 0.18, distWet: 0.50, volume: -3 },
+    nylon:    { baseUrl: `${GLEITZ}acoustic_guitar_nylon-mp3/`,  reverbWet: 0.40, distWet: 0,    volume:  0 },
+    steel:    { baseUrl: `${GLEITZ}acoustic_guitar_steel-mp3/`,  reverbWet: 0.24, distWet: 0,    volume:  1 },
+    electric: { baseUrl: `${GLEITZ}electric_guitar_clean-mp3/`,  reverbWet: 0.15, distWet: 0,    volume:  2 },
+    dist:     { baseUrl: `${GLEITZ}distortion_guitar-mp3/`,      reverbWet: 0.18, distWet: 0.50, volume: -1 },
 }
 
 class AudioManager {
