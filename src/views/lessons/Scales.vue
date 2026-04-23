@@ -61,6 +61,97 @@ const completeLesson = () => {
   store.markLessonComplete('scales')
   router.push('/dashboard')
 }
+
+// ── Teoria de cada escala ─────────────────────────────────
+interface ScaleTheory {
+  formula: string       // graus da escala
+  character: string     // adjetivos do som
+  usedIn: string        // gêneros e contextos
+  insight: string       // a lógica/segredo central da escala
+}
+
+const THEORY: Record<string, ScaleTheory> = {
+  major_pentatonic: {
+    formula: '1 – 2 – 3 – 5 – 6',
+    character: 'Alegre · Melódico · Leve',
+    usedIn: 'Pop, Country, Rock melódico, solos de Blues "feliz"',
+    insight: 'A escala maior sem a 4ª e a 7ª — as duas notas que causam mais tensão. O resultado é puro melodia sem atrito. Toque sobre qualquer acorde maior ou dominante e vai soar bem.',
+  },
+  minor_pentatonic: {
+    formula: '1 – b3 – 4 – 5 – b7',
+    character: 'Escuro · Poderoso · Direto',
+    usedIn: 'Rock, Blues, Metal, Hard Rock, Funk',
+    insight: 'A escala mais usada no mundo para improvisar na guitarra. Remove a 2ª e a 6ª da menor natural, eliminando as notas mais "instáveis". Cinco notas, cinco shapes — decore os shapes de cor e o braço inteiro vira playground.',
+  },
+  blues: {
+    formula: '1 – b3 – 4 – b5 – 5 – b7',
+    character: 'Tenso · Expressivo · Choroso',
+    usedIn: 'Blues, Jazz, Rock, Soul, R&B',
+    insight: 'É a pentatônica menor com um único acréscimo: o b5 (tritono), chamado de "Blue Note". Essa nota fica entre o 4 e o 5, criando uma tensão intensa que "quer" resolver. Use-a como passagem ou bend — não como nota de pouso.',
+  },
+  major: {
+    formula: '1 – 2 – 3 – 4 – 5 – 6 – 7',
+    character: 'Alegre · Estável · Luminoso',
+    usedIn: 'Pop, Rock, Sertanejo, Clássico, MPB',
+    insight: 'A escala-mãe de toda harmonia ocidental. Padrão de tons e semitons: T-T-S-T-T-T-S. Todo acorde de uma tonalidade maior nasce dela. Domine os 5 shapes desta e você entende de onde todos os outros modos vêm.',
+  },
+  dorian: {
+    formula: '1 – 2 – b3 – 4 – 5 – 6 – b7',
+    character: 'Menor com esperança · Groovy · Sofisticado',
+    usedIn: 'Jazz, Fusion, Rock Progressivo, Funk, Santana',
+    insight: 'Pegue a escala menor natural e eleve a 6ª em um semitom. Esse único ajuste transforma um som sombrio em algo mais aberto e jazzístico. É o 2º modo da escala maior — em Dó maior, o Ré Dórico usa exatamente as mesmas notas.',
+  },
+  mixolydian: {
+    formula: '1 – 2 – 3 – 4 – 5 – 6 – b7',
+    character: 'Maior com garra · Blues · Dominante',
+    usedIn: 'Blues, Rock clássico, Funk, sobre acordes dominantes (7)',
+    insight: 'A escala maior com a 7ª abaixada. Essa mudança cria a tensão do acorde dominante (1-3-5-b7). Use Mixolídio sempre que o acorde do momento for um X7 (dominante). Hendrix, Clapton e Stevie Ray Vaughan vivem nela.',
+  },
+  phrygian: {
+    formula: '1 – b2 – b3 – 4 – 5 – b6 – b7',
+    character: 'Sombrio · Exótico · Dramático',
+    usedIn: 'Metal, Flamenco, Música árabe/espanhola, Thrash',
+    insight: 'A assinatura do Frígio é o intervalo de semitom entre a tônica e a 2ª (b2). Esse meio-passo descendente cria imediata tensão e exotismo. É o 3º modo da escala maior. O riff de "Wherever I May Roam" (Metallica) é Frígio puro.',
+  },
+  lydian: {
+    formula: '1 – 2 – 3 – #4 – 5 – 6 – 7',
+    character: 'Etéreo · Mágico · Onírico',
+    usedIn: 'Rock progressivo, Cinema (John Williams), Satriani, Steve Vai',
+    insight: 'A escala maior com a 4ª elevada um semitom (#4). Essa nota cria um tritono acima da tônica, gerando tensão "suspensa" sem resolução imediata — o som que você associa a voo, magia ou épico. É o 4º modo da escala maior.',
+  },
+  minor: {
+    formula: '1 – 2 – b3 – 4 – 5 – b6 – b7',
+    character: 'Melancólico · Introspectivo · Sério',
+    usedIn: 'Rock, Metal, Música clássica, Baladas',
+    insight: 'A escala menor natural é o 6º modo da escala maior (Modo Eólio). Em Dó maior, a escala de Lá menor natural usa as mesmas notas — são "relativas". A diferença é apenas qual nota você trata como tônica, o que muda todo o caráter.',
+  },
+  harmonic_minor: {
+    formula: '1 – 2 – b3 – 4 – 5 – b6 – 7',
+    character: 'Dramático · Oriental · Neoclássico',
+    usedIn: 'Metal neoclássico, Música árabe, Bach, Yngwie Malmsteen',
+    insight: 'A menor natural com a 7ª elevada. Isso cria um intervalo de 3 semitons entre b6 e 7 — o "salto árabe" característico. A motivação é harmônica: com a 7ª elevada, o acorde V vira um V7 (dominante), resolvendo muito mais fortemente para o Im.',
+  },
+  melodic_minor: {
+    formula: '1 – 2 – b3 – 4 – 5 – 6 – 7',
+    character: 'Suave · Jazzístico · Sofisticado',
+    usedIn: 'Jazz, Bossa Nova, MPB, música de câmara',
+    insight: 'A menor harmônica resolve o "salto árabe" elevando também a 6ª. O resultado é uma escala que sobe suavemente como a maior, mas com o b3 que mantém o caráter menor. No jazz é usada também sobre acordes mMaj7 e outros acordes de tensão.',
+  },
+  diminished: {
+    formula: '1 – 2 – b3 – 4 – b5 – b6 – 6 – 7',
+    character: 'Tenso · Instável · Suspense',
+    usedIn: 'Jazz (sobre dim7 e 7b9), Metal, Trilhas sonoras',
+    insight: 'Escala simétrica de 8 notas com padrão fixo de Tom-Semitom. Essa simetria tem uma consequência prática enorme: a escala se repete a cada 3 casas no braço. Existem apenas 3 formas únicas da escala diminuta — cada uma cobre 4 tônicas diferentes.',
+  },
+  whole_tone: {
+    formula: '1 – 2 – 3 – #4 – #5 – b7',
+    character: 'Flutuante · Sem direção · Impressionista',
+    usedIn: 'Jazz (sobre dom7#5/dom7+), Debussy, trilhas de suspense',
+    insight: 'Todos os intervalos são tons inteiros — não há semitons. Isso elimina qualquer sensação de repouso ou resolução. A escala também é completamente simétrica, repetindo a cada 2 casas. Só existem 2 formas únicas no mundo inteiro (C e C#).',
+  },
+}
+
+const activeTheory = computed(() => THEORY[scaleType.value] ?? null)
 </script>
 
 <template>
@@ -158,12 +249,35 @@ const completeLesson = () => {
 
         <Fretboard :activeNotes="activeShape.notes" :frets="maxFret" :playingNote="playingNote" :interactiveNotes="true" />
 
-        <div class="mt-6 p-4 rounded-xl bg-zinc-950/50 border border-zinc-800 text-sm text-zinc-400">
-          <p class="mb-2">{{ activeDef.desc }}</p>
-          <p class="text-xs text-zinc-500">
-            🎯 Notas coloridas = <strong>Tônica</strong> | 
-            🟡 Notas com borda = <strong>Notas especiais</strong> (Blue Notes, 7ª elevada, etc.)
-          </p>
+        <!-- Theory card -->
+        <div v-if="activeTheory" class="mt-6 rounded-2xl border border-zinc-700/60 bg-zinc-950/60 overflow-hidden text-sm">
+
+          <!-- Header: fórmula + caráter -->
+          <div class="flex flex-wrap items-center justify-between gap-3 px-5 py-3 border-b border-zinc-800 bg-zinc-900/50">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Fórmula</span>
+              <span class="font-mono text-sm font-bold text-zinc-100 tracking-wide">{{ activeTheory.formula }}</span>
+            </div>
+            <span class="text-xs text-zinc-400 italic">{{ activeTheory.character }}</span>
+          </div>
+
+          <!-- Insight -->
+          <div class="px-5 py-4 border-b border-zinc-800/60">
+            <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5">Como funciona</p>
+            <p class="text-zinc-300 leading-relaxed">{{ activeTheory.insight }}</p>
+          </div>
+
+          <!-- Usa em + legenda -->
+          <div class="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Usa em</span>
+              <span class="text-zinc-400">{{ activeTheory.usedIn }}</span>
+            </div>
+            <p class="text-[10px] text-zinc-600 shrink-0">
+              🎯 Tônica colorida &nbsp;·&nbsp; 🟡 Nota especial
+            </p>
+          </div>
+
         </div>
       </div>
     </div>
