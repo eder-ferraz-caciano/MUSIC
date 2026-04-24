@@ -299,9 +299,9 @@ onUnmounted(clearProg)
       </div>
 
       <!-- Category pills -->
-      <div class="flex flex-wrap gap-2 mb-8">
+      <div class="flex gap-2 mb-8 overflow-x-auto sm:flex-wrap scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
         <button @click="chordCatFilter = 'all'"
-          class="px-4 py-2 rounded-xl text-xs font-bold border transition-all"
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold border transition-all shrink-0"
           :class="chordCatFilter === 'all'
             ? 'bg-purple-500 border-purple-400 text-white'
             : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600'">
@@ -309,7 +309,7 @@ onUnmounted(clearProg)
         </button>
         <button v-for="(meta, cat) in CHORD_CATS" :key="cat"
           @click="chordCatFilter = cat"
-          class="px-4 py-2 rounded-xl text-xs font-bold border transition-all"
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold border transition-all shrink-0 whitespace-nowrap"
           :class="chordCatFilter === cat
             ? CAT_PILL_ACTIVE[meta.color]
             : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600'">
@@ -396,9 +396,9 @@ onUnmounted(clearProg)
     <main v-else class="max-w-[1600px] mx-auto px-4 sm:px-8 py-6">
 
       <!-- Category pills -->
-      <div class="flex flex-wrap gap-2 mb-8">
+      <div class="flex gap-2 mb-8 overflow-x-auto sm:flex-wrap scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
         <button @click="progCatFilter = 'all'"
-          class="px-4 py-2 rounded-xl text-xs font-bold border transition-all"
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold border transition-all shrink-0"
           :class="progCatFilter === 'all'
             ? 'bg-purple-500 border-purple-400 text-white'
             : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600'">
@@ -406,7 +406,7 @@ onUnmounted(clearProg)
         </button>
         <button v-for="(meta, cat) in PROG_CATS" :key="cat"
           @click="progCatFilter = cat"
-          class="px-4 py-2 rounded-xl text-xs font-bold border transition-all"
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold border transition-all shrink-0 whitespace-nowrap"
           :class="progCatFilter === cat
             ? CAT_PILL_ACTIVE[meta.color]
             : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600'">
