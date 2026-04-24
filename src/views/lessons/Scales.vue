@@ -3,9 +3,12 @@ import { ref, computed, watch } from 'vue'
 import Fretboard from '../../components/Fretboard.vue'
 import { useRouter } from 'vue-router'
 import { useProgressStore } from '../../store/progress'
-import { ChevronLeft, CheckCircle, Play } from 'lucide-vue-next'
+import { CheckCircle, Play } from 'lucide-vue-next'
+import TopNav from '../../components/TopNav.vue'
 import { audio } from '../../utils/audio'
 import { buildScalesForRoot, ROOT_NOTES, scaleTemplateKeys } from '../../data/scales'
+
+audio.setPreset('steel')
 
 const router = useRouter()
 const store = useProgressStore()
@@ -46,7 +49,7 @@ const playScaleSequence = async () => {
     setTimeout(() => {
       playingNote.value = { string: n.string, fret: n.fret }
       const toneNote = audio.getFretNote(n.string, n.fret)
-      audio.playNote(toneNote, '8n')
+      audio.playNote(toneNote)
       setTimeout(() => {
         if (playingNote.value?.string === n.string && playingNote.value?.fret === n.fret) {
           playingNote.value = null
@@ -155,10 +158,9 @@ const activeTheory = computed(() => THEORY[scaleType.value] ?? null)
 </script>
 
 <template>
-  <div class="min-h-screen bg-zinc-950 text-zinc-50 p-4 sm:p-12 pb-24 font-sans w-[85%] mx-auto">
-    <button @click="router.push('/dashboard')" class="flex items-center gap-2 text-zinc-400 hover:text-white mb-6">
-      <ChevronLeft class="w-5 h-5" /> Retornar
-    </button>
+  <div class="min-h-screen bg-zinc-950 text-zinc-50 font-sans">
+    <TopNav />
+    <div class="w-[85%] mx-auto p-4 sm:p-12 pb-24">
 
     <h1 class="text-4xl font-black mb-4">Módulo Escalas &amp; Solos</h1>
     <p class="text-zinc-300 max-w-3xl mb-10 text-lg leading-relaxed">
@@ -293,5 +295,6 @@ const activeTheory = computed(() => THEORY[scaleType.value] ?? null)
       </button>
     </div>
 
+    </div>
   </div>
 </template>

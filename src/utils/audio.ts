@@ -31,10 +31,10 @@ interface PresetCfg {
 }
 
 const CFG: Record<SoundPreset, PresetCfg> = {
-    nylon:    { baseUrl: `${GLEITZ}acoustic_guitar_nylon-mp3/`,  reverbWet: 0.40, distWet: 0,    volume:  0 },
-    steel:    { baseUrl: `${GLEITZ}acoustic_guitar_steel-mp3/`,  reverbWet: 0.24, distWet: 0,    volume:  1 },
-    electric: { baseUrl: `${GLEITZ}electric_guitar_clean-mp3/`,  reverbWet: 0.15, distWet: 0,    volume:  2 },
-    dist:     { baseUrl: `${GLEITZ}distortion_guitar-mp3/`,      reverbWet: 0.18, distWet: 0.50, volume: -1 },
+    nylon:    { baseUrl: `${GLEITZ}acoustic_guitar_nylon-mp3/`,  reverbWet: 0.18, distWet: 0,    volume:  0 },
+    steel:    { baseUrl: `${GLEITZ}acoustic_guitar_steel-mp3/`,  reverbWet: 0.12, distWet: 0,    volume:  1 },
+    electric: { baseUrl: `${GLEITZ}electric_guitar_clean-mp3/`,  reverbWet: 0.08, distWet: 0,    volume:  2 },
+    dist:     { baseUrl: `${GLEITZ}distortion_guitar-mp3/`,      reverbWet: 0.10, distWet: 0.50, volume: -1 },
 }
 
 class AudioManager {
@@ -46,24 +46,24 @@ class AudioManager {
     private volumeNode: Tone.Volume
     private initialized = false
 
-    readonly currentPreset = ref<SoundPreset>('nylon')
+    readonly currentPreset = ref<SoundPreset>('steel')
     // true while the current preset's samples are still downloading
     readonly loading = ref(true)
 
     constructor() {
         this.distortion = new Tone.Distortion({ distortion: 0.65, wet: 0 })
         this.compressor = new Tone.Compressor(-18, 4)
-        // Freeverb: synchronous feedback reverb, no async IR generation
-        this.reverb     = new Tone.Freeverb({ roomSize: 0.55, dampening: 3200 })
-        this.volumeNode = new Tone.Volume(CFG.nylon.volume)
+        // Freeverb: synchronous feedback reverb (roomSize ~0.2 ≈ ~1s tail)
+        this.reverb     = new Tone.Freeverb({ roomSize: 0.2, dampening: 3200 })
+        this.volumeNode = new Tone.Volume(CFG.steel.volume)
 
         // Shared effects bus: all samplers → distortion → compressor → reverb → volume → out
         this.distortion.chain(this.compressor, this.reverb, this.volumeNode, Tone.getDestination())
-        this.reverb.wet.value     = CFG.nylon.reverbWet
-        this.distortion.wet.value = CFG.nylon.distWet
+        this.reverb.wet.value     = CFG.steel.reverbWet
+        this.distortion.wet.value = CFG.steel.distWet
 
         // Load the default preset immediately; others are lazy-loaded on first select
-        this._loadSampler('nylon')
+        this._loadSampler('steel')
     }
 
     private _loadSampler(preset: SoundPreset) {

@@ -2,7 +2,11 @@
 import Fretboard from '../../components/Fretboard.vue'
 import { useRouter } from 'vue-router'
 import { useProgressStore } from '../../store/progress'
-import { CheckCircle, ChevronLeft } from 'lucide-vue-next'
+import { CheckCircle } from 'lucide-vue-next'
+import TopNav from '../../components/TopNav.vue'
+import { audio } from '../../utils/audio'
+
+audio.setPreset('steel')
 
 const router = useRouter()
 const store = useProgressStore()
@@ -27,12 +31,9 @@ const cMajorNotes = [
 </script>
 
 <template>
-  <div class="min-h-screen bg-zinc-950 text-zinc-50 p-6 sm:p-12 pb-24 font-sans w-[85%] mx-auto">
-    
-    <button @click="router.push('/dashboard')" class="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-8">
-      <ChevronLeft class="w-5 h-5" />
-      Voltar para o Painel
-    </button>
+  <div class="min-h-screen bg-zinc-950 text-zinc-50 font-sans">
+    <TopNav />
+    <div class="w-[85%] mx-auto p-6 sm:p-12 pb-24">
 
     <h1 class="text-4xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Módulo 1: Introdução à Guitarra e Notas Musicais</h1>
     
@@ -108,5 +109,6 @@ const cMajorNotes = [
       </button>
     </div>
 
+    </div>
   </div>
 </template>

@@ -3,9 +3,12 @@ import { ref, computed } from 'vue'
 import Fretboard from '../../components/Fretboard.vue'
 import { useRouter } from 'vue-router'
 import { useProgressStore } from '../../store/progress'
-import { ChevronLeft, Play, Music, CheckCircle } from 'lucide-vue-next'
+import { Play, Music, CheckCircle } from 'lucide-vue-next'
 import { audio } from '../../utils/audio'
 import { chordDefinitions, openChordDefinitions } from '../../data/chords'
+import TopNav from '../../components/TopNav.vue'
+
+audio.setPreset('steel')
 
 const router = useRouter()
 const store = useProgressStore()
@@ -41,7 +44,7 @@ const playCurrentChord = async () => {
     setTimeout(() => {
       playingNote.value = { string: n.string, fret: n.fret }
       const toneNote = audio.getFretNote(n.string, n.fret)
-      audio.playNote(toneNote, '8n')
+      audio.playNote(toneNote)
       setTimeout(() => {
         if (playingNote.value?.string === n.string && playingNote.value?.fret === n.fret) {
           playingNote.value = null
@@ -59,11 +62,9 @@ const completeLesson = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-zinc-950 text-zinc-50 p-4 sm:p-12 pb-24 font-sans w-[85%] mx-auto">
-    <button @click="router.push('/dashboard')" class="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-6">
-      <ChevronLeft class="w-5 h-5" />
-      Voltar
-    </button>
+  <div class="min-h-screen bg-zinc-950 text-zinc-50 font-sans">
+    <TopNav />
+    <div class="w-[85%] mx-auto p-4 sm:p-12 pb-24">
 
     <h1 class="text-3xl sm:text-4xl font-black mb-4 flex items-center gap-3">
       <Music class="w-8 h-8 text-amber-500" /> Formação de Acordes e Variações
@@ -201,7 +202,7 @@ const completeLesson = () => {
 
     <!-- Conclusion Button -->
     <div class="flex justify-end">
-      <button 
+      <button
         @click="completeLesson"
         class="flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 px-8 rounded-xl shadow-[0_0_20px_rgba(217,119,6,0.2)] transition-all"
       >
@@ -210,5 +211,6 @@ const completeLesson = () => {
       </button>
     </div>
 
+    </div>
   </div>
 </template>
