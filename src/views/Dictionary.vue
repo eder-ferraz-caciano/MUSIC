@@ -229,17 +229,21 @@ onUnmounted(clearProg)
 
     <!-- ═══════════════ SHARED RHYTHM / TEMPO BAR ═══════════════ -->
     <div class="sticky top-[120px] z-20 bg-zinc-950/85 backdrop-blur-md border-b border-zinc-800/60">
-      <div class="max-w-[1600px] mx-auto px-4 sm:px-8 py-3">
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-wider">
+      <div class="max-w-[1600px] mx-auto px-3 sm:px-8 py-2 sm:py-3 space-y-2">
+
+        <!-- Ritmo row -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="hidden sm:flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-wider shrink-0">
             <span class="w-1 h-4 bg-purple-500 rounded-full"></span>
             Ritmo
           </div>
-          <div class="flex flex-wrap gap-1.5 flex-1">
+          <span class="sm:hidden w-1 h-5 bg-purple-500 rounded-full shrink-0" aria-label="Ritmo"></span>
+
+          <div class="flex gap-1.5 flex-1 min-w-0 overflow-x-auto sm:flex-wrap scrollbar-none -mx-1 px-1">
             <button v-for="r in RHYTHMS" :key="r.id"
               @click="rhythmId = r.id"
               :title="r.desc"
-              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all"
+              class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold border transition-all shrink-0"
               :class="rhythmId === r.id
                 ? 'bg-purple-500 border-purple-400 text-white shadow-lg shadow-purple-500/30'
                 : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600'">
@@ -247,30 +251,34 @@ onUnmounted(clearProg)
               {{ r.name }}
             </button>
           </div>
+
           <button @click="previewRhythm"
-            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition-all whitespace-nowrap">
-            <Play fill="currentColor" class="w-3 h-3" />
-            Preview
+            :aria-label="'Preview ' + currentRhythm.name"
+            class="flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-bold bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition-all whitespace-nowrap shrink-0">
+            <Play fill="currentColor" class="w-3.5 h-3.5" />
+            <span class="hidden sm:inline">Preview</span>
           </button>
         </div>
 
         <!-- Tempo row -->
-        <div class="flex flex-wrap items-center gap-2 mt-2">
-          <div class="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-wider">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="hidden sm:flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-wider shrink-0">
             <span class="w-1 h-4 bg-amber-500 rounded-full"></span>
             Tempo
           </div>
-          <div class="flex gap-1 bg-zinc-900 border border-zinc-800 rounded-full p-1">
+          <span class="sm:hidden w-1 h-5 bg-amber-500 rounded-full shrink-0" aria-label="Tempo"></span>
+
+          <div class="flex gap-1 bg-zinc-900 border border-zinc-800 rounded-full p-1 shrink-0">
             <button v-for="t in TEMPO_OPTIONS" :key="t.value"
               @click="tempoMultiplier = t.value"
-              class="px-3 py-1 rounded-full text-[11px] font-bold transition-all"
+              class="px-2.5 sm:px-3 py-1 rounded-full text-[11px] font-bold transition-all"
               :class="tempoMultiplier === t.value
                 ? 'bg-amber-500 text-zinc-950 shadow'
                 : 'text-zinc-400 hover:text-white'">
               {{ t.label }}
             </button>
           </div>
-          <p class="text-[11px] text-zinc-500 italic ml-2">{{ currentRhythm.desc }}</p>
+          <p class="hidden sm:block text-[11px] text-zinc-500 italic truncate ml-2">{{ currentRhythm.desc }}</p>
         </div>
       </div>
     </div>
