@@ -4,6 +4,7 @@
 export type ProgressionCategory =
     | 'pop' | 'blues' | 'jazz' | 'brazilian'
     | 'dissonant' | 'worship' | 'funk' | 'modal' | 'reggae'
+    | 'diatonic'
 
 export interface Progression {
     id: string
@@ -26,6 +27,7 @@ export const CATEGORY_META: Record<ProgressionCategory, { label: string; color: 
     funk:       { label: 'Funk / R&B / Soul', color: 'orange',  blurb: 'Vamps de 7ª e ciclos curtos que sustentam groove e solos.' },
     modal:      { label: 'Modal',             color: 'teal',    blurb: 'Cor modal pura — dórico, mixolídio, lídio, frígio.' },
     reggae:     { label: 'Reggae / Ska',      color: 'lime',    blurb: 'I-IV-V em off-beat — balanço tropical.' },
+    diatonic:   { label: 'Diatônica / Escala', color: 'cyan',   blurb: 'Cadências e ciclos que nascem da própria escala — o esqueleto da harmonia tonal.' },
 }
 
 export const progressions: Progression[] = [
@@ -603,6 +605,150 @@ export const progressions: Progression[] = [
         example: 'Steel Pulse, Burning Spear',
         msPerChord: 700,
         chordIds: ['Am', 'G', 'Dm', 'E7'],
+    },
+
+    // ══════════════ DIATÔNICA / ESCALA ══════════════
+    {
+        id: 'diatonic_I_vi_ii_V_I',
+        name: 'Turnaround Jazz — I vi ii V I (em C)',
+        category: 'diatonic',
+        roman: 'I – vi – ii – V – I',
+        desc: 'A "mãe" das cadências jazz: cada acorde é um grau da escala de Dó maior.',
+        example: 'Milhares de standards: "Heart and Soul", "Blue Moon", turnarounds em geral',
+        msPerChord: 700,
+        chordIds: ['C', 'Am', 'Dm7', 'G7', 'Cmaj7'],
+    },
+    {
+        id: 'diatonic_ii_V_I_C',
+        name: 'ii – V – I em C (básico)',
+        category: 'diatonic',
+        roman: 'ii7 – V7 – Imaj7',
+        desc: 'A cadência jazz mais fundamental — três acordes que abrem e fecham frases inteiras.',
+        example: 'Base de 90% do repertório de jazz',
+        msPerChord: 800,
+        chordIds: ['Dm7', 'G7', 'Cmaj7'],
+    },
+    {
+        id: 'diatonic_ii_V_i_minor',
+        name: 'ii – V – i menor (em Am)',
+        category: 'diatonic',
+        roman: 'iiø – V7 – i',
+        desc: 'A versão menor: meio-diminuto + dominante + tônica menor.',
+        example: 'Autumn Leaves (seção B), "Summertime", boleros',
+        msPerChord: 800,
+        chordIds: ['Bm7b5', 'E7', 'Am7'],
+    },
+    {
+        id: 'diatonic_cad_autentica',
+        name: 'Cadência Autêntica Perfeita (V7 → I)',
+        category: 'diatonic',
+        roman: 'V7 – I',
+        desc: 'O "ponto final" da harmonia tonal — dominante resolve na tônica.',
+        example: 'Final de praticamente qualquer peça clássica',
+        msPerChord: 1000,
+        chordIds: ['G7', 'C'],
+    },
+    {
+        id: 'diatonic_cad_plagal',
+        name: 'Cadência Plagal "Amém" (IV → I)',
+        category: 'diatonic',
+        roman: 'IV – I',
+        desc: 'A cadência do "amém" — suave, conclusiva, sem a tensão do V7.',
+        example: 'Hinos religiosos, baladas clássicas',
+        msPerChord: 1000,
+        chordIds: ['F', 'C'],
+    },
+    {
+        id: 'diatonic_cad_interrompida',
+        name: 'Cadência Interrompida (V → vi)',
+        category: 'diatonic',
+        roman: 'V – vi',
+        desc: 'Quando você espera o I maior mas recebe o vi menor — surpresa dramática.',
+        example: 'Trechos de Bach, finais em suspense de trilhas sonoras',
+        msPerChord: 900,
+        chordIds: ['G', 'Am'],
+    },
+    {
+        id: 'diatonic_escala_maior',
+        name: 'Escala de Dó Harmonizada — Subida',
+        category: 'diatonic',
+        roman: 'I – ii – iii – IV – V – vi – vii° – I',
+        desc: 'Todos os 7 graus da escala maior, um de cada vez. A cara pura da tonalidade.',
+        example: 'Exercício básico de harmonia — ouvir o caráter maior/menor/diminuto',
+        msPerChord: 650,
+        chordIds: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'Bdim', 'C'],
+    },
+    {
+        id: 'diatonic_escala_menor',
+        name: 'Escala de Lá Menor Harmonizada',
+        category: 'diatonic',
+        roman: 'i – ii° – III – iv – v – VI – VII – i',
+        desc: 'Os 7 graus do modo menor natural (eólio) — cor melancólica caminhando.',
+        example: 'Base do rock modal, folk menor',
+        msPerChord: 650,
+        chordIds: ['Am', 'Bdim', 'C', 'Dm', 'Em', 'F', 'G', 'Am'],
+    },
+    {
+        id: 'diatonic_ciclo_quartas',
+        name: 'Ciclo de Quartas Diatônico em C',
+        category: 'diatonic',
+        roman: 'Imaj7 – IVmaj7 – viiø – iii7 – vi7 – ii7 – V7 – Imaj7',
+        desc: 'Ciclo de 4ªs dentro da tonalidade — todos os 7 acordes diatônicos com 7ª.',
+        example: '"Fly Me to the Moon", "Autumn Leaves", boleros jazz',
+        msPerChord: 600,
+        chordIds: ['Cmaj7', 'Fmaj7', 'Bm7b5', 'Em7', 'Am7', 'Dm7', 'G7', 'Cmaj7'],
+    },
+    {
+        id: 'diatonic_I_IV_V',
+        name: 'I – IV – V (Tríade Perfeita)',
+        category: 'diatonic',
+        roman: 'I – IV – V – I',
+        desc: 'Os três pilares da tonalidade maior — suficiente pra tocar metade do cancioneiro.',
+        example: 'Rock\'n\'roll, folk, country, sertanejo de raiz',
+        msPerChord: 800,
+        chordIds: ['C', 'F', 'G', 'C'],
+    },
+
+    // ══════════════ DISSONANTES adicionais ══════════════
+    {
+        id: 'dissonant_bond_vamp',
+        name: 'Vamp Espião — Bond',
+        category: 'dissonant',
+        roman: 'i(maj7) – i7',
+        desc: 'Descida cromática do maj7 pro 7m — o som universal de espionagem.',
+        example: '"James Bond Theme", "Mission Impossible" (variante)',
+        msPerChord: 700,
+        chordIds: ['AmMaj7', 'Am7', 'AmMaj7', 'Am7'],
+    },
+    {
+        id: 'dissonant_minor_line_cliche',
+        name: 'Descida Menor Clichê (Am)',
+        category: 'dissonant',
+        roman: 'i – i(maj7) – i7 – i6',
+        desc: 'Linha cromática descendente de A → G♯ → G → F♯. "My Funny Valentine".',
+        example: '"My Funny Valentine", "Stairway to Heaven" (intro)',
+        msPerChord: 900,
+        chordIds: ['Am', 'AmMaj7', 'Am7', 'Am6'],
+    },
+    {
+        id: 'dissonant_ii_V7alt_i',
+        name: 'ii – V7alt – i menor (em Dm)',
+        category: 'dissonant',
+        roman: 'iiø – V7alt – i',
+        desc: 'Cadência menor com dominante alterado — tensão máxima antes da resolução.',
+        example: 'Jazz bebop moderno, "Stella by Starlight"',
+        msPerChord: 700,
+        chordIds: ['Em7b5', 'A7b9', 'Dm'],
+    },
+    {
+        id: 'dissonant_lydian_vamp',
+        name: 'Vamp Lídio — Cmaj7♯11',
+        category: 'dissonant',
+        roman: 'Imaj7♯11 – II',
+        desc: 'Cor lídia etérea — brilho cinematográfico com F♯ sobre C maior.',
+        example: 'Trilhas de Danny Elfman, temas Disney/Pixar',
+        msPerChord: 1100,
+        chordIds: ['Cmaj7sharp11', 'D', 'Cmaj7sharp11', 'D'],
     },
 ]
 

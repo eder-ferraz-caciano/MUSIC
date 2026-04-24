@@ -97,6 +97,10 @@ const handleFretClick = async (s: number, f: number) => {
                 playingNote?.string === s && playingNote?.fret === f ? 'scale-150 ring-4 ring-yellow-400 !z-40 shadow-[0_0_20px_rgba(250,204,21,0.8)]' : 'ring-white/50'
               ]"
             >
+              <span
+                v-if="f > 0"
+                class="absolute -top-2.5 text-[9px] font-extrabold text-amber-300 bg-zinc-950/85 rounded-sm px-1 leading-none pointer-events-none ring-1 ring-amber-400/40"
+              >{{ f }}</span>
               {{ isNoteActive(s,f)?.label || getNoteLabel(s, f) }}
             </div>
           </div>

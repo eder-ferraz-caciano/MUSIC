@@ -66,7 +66,7 @@ export const CATEGORY_META: Record<ChordCategory, { label: string; color: string
     aug:         { label: 'Aumentados',          color: 'orange',  blurb: 'Quinta aumentada — suspense, cinema, inquietude.' },
     half_dim:    { label: 'Meio-diminuto (m7b5)',color: 'fuchsia', blurb: 'O ii° do menor — porta de entrada para progressões jazzísticas.' },
     extended:    { label: 'Tensões 9 / 11 / 13', color: 'violet',  blurb: 'Tensões coloridas empilhadas — linguagem jazz moderna.' },
-    altered:     { label: 'Dissonantes / Alt',   color: 'pink',    blurb: 'Dominantes com notas alteradas — o som "fora" do jazz e do fusion.' },
+    altered:     { label: 'Dissonantes / Alt',   color: 'pink',    blurb: 'Dominantes alterados, minor-major, augmented — sonoridades fora do comum.' },
 }
 
 export const chordDictionary: DictChord[] = [
@@ -1654,6 +1654,66 @@ export const chordDictionary: DictChord[] = [
         positions: [
             p(5, 0, 'fifth'), p(4, 0, 'root'), p(3, 2, 'fifth', 1),
             p(2, 3, 'root', 3), p(1, 2, 'third', 2),
+        ],
+    },
+
+    // ══════════════ DISSONANTES EXTRAS ══════════════
+    {
+        id: 'CmMaj7', name: 'Cm(maj7)', fullName: 'Dó Menor com 7ª Maior (tema Bond)', category: 'altered', baseFret: 3,
+        desc: 'Minor-major 7 — o som mais cinematográfico que existe. "James Bond Theme".',
+        tip: 'Menor + 7ª maior cria atrito proposital entre E♭ e B.',
+        mutedStrings: [6],
+        positions: [
+            p(5, 3, 'root', 1), p(4, 5, 'fifth', 4), p(3, 4, 'seventh', 2),
+            p(2, 4, 'third', 3), p(1, 3, 'fifth', 1),
+        ],
+    },
+    {
+        id: 'AmMaj7', name: 'Am(maj7)', fullName: 'Lá Menor com 7ª Maior', category: 'altered', baseFret: 1,
+        desc: 'A clássica descida Am → Am(maj7) → Am7 → Am6 ("My Funny Valentine", Bond).',
+        tip: 'Só mover o dedo 1 de G♯ (maj7) para G (7m) para ouvir a descida cromática.',
+        mutedStrings: [6],
+        positions: [
+            p(5, 0, 'root'), p(4, 2, 'fifth', 3), p(3, 1, 'seventh', 1),
+            p(2, 1, 'third', 2), p(1, 0, 'fifth'),
+        ],
+    },
+    {
+        id: 'Cm_add9', name: 'Cm(add9)', fullName: 'Dó Menor com 9ª Adicionada', category: 'add9',  baseFret: 1,
+        desc: 'Menor com 9 — sonoridade moderna de pop melancólico e neo-soul.',
+        mutedStrings: [6, 3],
+        positions: [
+            p(5, 3, 'root', 3), p(4, 5, 'fifth', 4),
+            p(2, 4, 'third', 2), p(1, 3, 'fifth', 1),
+        ],
+    },
+    {
+        id: 'CaugMaj7', name: 'C+maj7', fullName: 'Dó Aumentado com 7ª Maior', category: 'altered', baseFret: 1,
+        desc: 'Aug + maj7 — máxima instabilidade colorida. Som de Bond/Morricone.',
+        tip: 'Três tensões empilhadas (E, G♯, B) sobre C — movimento 100% cromático.',
+        mutedStrings: [6],
+        positions: [
+            p(5, 3, 'root', 3), p(4, 2, 'third', 2), p(3, 1, 'tension', 1),
+            p(2, 0, 'seventh'), p(1, 0, 'third'),
+        ],
+    },
+    {
+        id: 'Cmaj7sharp11', name: 'Cmaj7♯11', fullName: 'Dó com 7ª Maior e 11 Aumentada (Lídio)', category: 'extended', baseFret: 1,
+        desc: 'A cor lídia mais pura — brilho etéreo de abertura de filme.',
+        tip: 'O F♯ aberto na 1ª corda é quem dá o caráter lídio.',
+        mutedStrings: [6],
+        positions: [
+            p(5, 3, 'root', 3), p(4, 2, 'third', 2), p(3, 0, 'fifth'),
+            p(2, 0, 'seventh'), p(1, 2, 'tension', 1),
+        ],
+    },
+    {
+        id: 'A7sharp5', name: 'A7♯5', fullName: 'Lá Dominante com 5 Aumentada', category: 'altered', baseFret: 1,
+        desc: 'A7 com E♯ (=F) — tensão que resolve brutalmente em Dm.',
+        mutedStrings: [6, 1],
+        positions: [
+            p(5, 0, 'root'), p(4, 2, 'third', 2), p(3, 0, 'seventh'),
+            p(2, 2, 'tension', 3),
         ],
     },
 ]
